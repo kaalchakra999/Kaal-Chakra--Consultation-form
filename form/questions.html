@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaal Chakra — Consultation (questions)</title>
+
+  <!-- Fonts (same family set for continuity) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700&family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet">
+
+
+
+
+  <style>
+    :root{
+      --bg1: #f1e8ff;
+      --bg2: #e8f7ff;
+      --lavender: #c5a9ff;
+      --pale-cyan: #a5d8ff;
+      --soft-peach: #fff0f0;
+      --silver-blue: #dbe9ff;
+      --glass: rgba(255,255,255,0.055);
+      --accent: #a57cff;
+      --shadow: rgba(200,200,255,0.16);
+      --transition: 300ms cubic-bezier(.2,.9,.3,1);
+    }
+
+    /* Reset */
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2) 55%);
+      color:#111;
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* Reuse background elements but slightly tweaked (10% difference): sizes/durations slightly different */
+    .bokeh{
+      position:fixed; inset:0; z-index:0; pointer-events:none;
+      background:
+        radial-gradient(1300px 1300px at 12% 18%, rgba(197,169,255,0.07), transparent 16%),
+        radial-gradient(1000px 1000px at 82% 72%, rgba(165,216,255,0.055), transparent 14%),
+        radial-gradient(520px 520px at 50% 44%, rgba(255,240,248,0.045), transparent 9%);
+      filter: blur(20px) saturate(108%);
+      mix-blend-mode:screen;
+    }
+
+    .orb-wrap{ position:fixed; inset:0; z-index:0; pointer-events:none }
+    .orb{
+      position:absolute;border-radius:50%;opacity:0.9;mix-blend-mode:screen;filter: blur(6px);
+      animation: drift var(--dur) linear infinite;
+    }
+    .orb.o1{width:200px;height:200px;left:4%;top:8%;background:radial-gradient(circle,#fff0f8 0%, rgba(197,169,255,0.34) 45%, transparent 60%); --dur:66s}
+    .orb.o2{width:140px;height:140px;right:6%;top:20%;background:radial-gradient(circle,#f0fff9 0%, rgba(165,216,255,0.26) 40%, transparent 60%); --dur:50s}
+    .orb.o3{width:130px;height:130px;left:36%;bottom:10%;background:radial-gradient(circle,#fff7ec 0%, rgba(255,224,220,0.2) 45%, transparent 65%); --dur:78s}
+    .orb.o4{width:100px;height:100px;right:26%;bottom:18%;background:radial-gradient(circle,#f6f1ff 0%, rgba(197,169,255,0.2) 50%, transparent 70%); --dur:58s}
+    .orb.o5{width:62px;height:62px;left:62%;top:4%;background:radial-gradient(circle,#e8f9ff 0%, rgba(165,216,255,0.22) 45%, transparent 70%); --dur:40s}
+
+    @keyframes drift { 0%{transform:translateY(0) translateX(0) scale(1)} 50%{transform:translateY(-70px) translateX(10px) scale(1.02)} 100%{transform:translateY(0) translateX(0) scale(1)} }
+
+    .stars{ position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image:
+        radial-gradient(circle at 12% 22%, rgba(255,255,255,0.7) 1px, transparent 1px),
+        radial-gradient(circle at 42% 64%, rgba(255,255,255,0.5) 1px, transparent 1px),
+        radial-gradient(circle at 72% 32%, rgba(255,255,255,0.6) 1px, transparent 1px);
+      background-size: 76px 76px, 92px 92px, 58px 58px;
+      filter: blur(0.9px);
+      animation: twinkle 42s linear infinite; mix-blend-mode:screen; opacity:0.78;
+    }
+    @keyframes twinkle{ from{transform:translateY(0)} to{transform:translateY(-130px)} }
+
+    /* layout: center card */
+    .wrap{
+      width:min(820px,96vw);
+      padding:28px;
+      z-index:2;
+      display:flex;
+      gap:20px;
+      align-items:flex-start;
+      justify-content:center;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border-radius:14px;
+      padding:28px;
+      backdrop-filter: blur(12px) saturate(115%);
+      border:1px solid rgba(165,140,235,0.10);
+      box-shadow: 0 14px 40px var(--shadow);
+      width:min(680px,100%);
+      position:relative;
+      overflow:visible;
+    }
+
+    /* Slight 10% difference to index: more compact title and a slightly stronger glow */
+    h1{
+      font-family: "Orbitron", "Cormorant Garamond", serif;
+      font-size: clamp(20px, 2.4vw, 32px);
+      color:#342646;
+      letter-spacing:1.5px;
+      margin-bottom:6px;
+    }
+    p.subtitle{
+      font-family: "Cormorant Garamond", serif;
+      color:#332a3e;
+      opacity:0.9;
+      margin-bottom:16px;
+    }
+
+    form{ display:flex; flex-direction:column; gap:12px; }
+
+    label{ font-weight:600; color:#463a57; font-size:14px }
+
+    select, textarea{
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid rgba(80,60,90,0.06);
+      background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+      font-size:15px;
+    }
+
+    select:focus, textarea:focus{ box-shadow:0 10px 30px rgba(165,129,255,0.06); border-color: rgba(165,129,255,0.6); outline:none }
+
+    textarea{ min-height:120px; resize:vertical; }
+
+    .answers{ margin-top:6px; display:flex; flex-direction:column; gap:10px }
+
+    .btn{
+      margin-top:8px; padding:12px; border-radius:12px; border:none; font-weight:700;
+      background: linear-gradient(135deg, var(--pale-cyan), var(--lavender));
+      cursor:pointer; transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .btn:hover{ transform: translateY(-4px); box-shadow: 0 18px 48px rgba(165,129,255,0.18) }
+
+    .muted{ font-size:13px; color: rgba(40,34,50,0.6) }
+
+    /* package selection layout */
+    .package-row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap }
+    .package-chip{
+      padding:10px 12px; border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(10,10,10,0.03);
+      cursor:pointer; transition:transform var(--transition), box-shadow var(--transition);
+      font-weight:600;
+    }
+    .package-chip.active{
+      transform:translateY(-6px);
+      box-shadow: 0 12px 36px rgba(165,129,255,0.09);
+      border-color: rgba(165,129,255,0.22);
+      background:linear-gradient(180deg, rgba(197,169,255,0.06), rgba(165,216,255,0.03));
+    }
+
+    /* subtle footer */
+    .footer{ margin-top:8px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap }
+
+    @media (max-width:720px){
+      .wrap{ padding:18px }
+      .card{ padding:18px }
+    }
+  </style>
+</head>
+<body>
+  <!-- background layers — consistent with index but slightly different timings/size to maintain 10% variation -->
+  <div class="bokeh" aria-hidden="true"></div>
+  <div class="orb-wrap" aria-hidden="true">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+    <div class="orb o4"></div>
+    <div class="orb o5"></div>
+  </div>
+  <div class="stars" aria-hidden="true"></div>
+
+  <main class="wrap" role="main" aria-labelledby="qaTitle">
+    <article class="card" aria-live="polite">
+      <h1 id="qaTitle">KAAL CHAKRA</h1>
+      <p class="subtitle">Choose a Package and ask your questions, we will answer them gracefully.</p>
+
+      <form id="questionForm" novalidate>
+        <label for="package">Select your package</label>
+        <div class="package-row" id="packageRow" role="tablist" aria-label="Package options">
+          <div class="package-chip" data-value="1" tabindex="0">1 Question - ₹60</div>
+          <div class="package-chip" data-value="2" tabindex="0">2 Questions - ₹120</div>
+          <div class="package-chip" data-value="3" tabindex="0">3 Questions with detailed answers - ₹240</div>
+        </div>
+
+        <div class="answers" id="questionFields" aria-live="polite">
+          <!-- JS will create textarea fields here -->
+        </div>
+
+        <div class="footer">
+          <div class="muted">Your basic details are preserved from the previous page.</div>
+          <div style="display:flex; gap:10px; align-items:center">
+            <button type="button" class="btn" id="backBtn" aria-label="Back to details">← Back</button>
+            <button type="submit" class="btn" id="submitBtn">Submit Consultation ✦</button>
+          </div>
+        </div>
+      </form>
+    </article>
+  </main>
+
+<script>
+(function(){
+  const packageRow = document.getElementById('packageRow');
+  const chips = Array.from(packageRow.querySelectorAll('.package-chip'));
+  const questionFields = document.getElementById('questionFields');
+  const backBtn = document.getElementById('backBtn');
+  const form = document.getElementById('questionForm');
+
+  let selected = null;
+
+  // 🟣 Replace this with your Google Apps Script deployment URL
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz22p4fBYwuG8siJn7oxFPQJK1VJ_9neqz-zwYNDmwnlFbNjU6KO_N3j4fDuNdq1TSL/exec";
+
+  // Restore package if saved
+  try {
+    const savedPkg = sessionStorage.getItem('kaal_chakra_pkg');
+    if (savedPkg) {
+      const chip = chips.find(c => c.dataset.value === savedPkg);
+      if (chip) activateChip(chip);
+    }
+  } catch(e){}
+
+  function activateChip(chip){
+    chips.forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    selected = parseInt(chip.dataset.value,10) || 0;
+    renderQuestions(selected);
+    try { sessionStorage.setItem('kaal_chakra_pkg', chip.dataset.value); } catch(e){}
+  }
+
+  function renderQuestions(count){
+    questionFields.innerHTML = '';
+    if (!count) return;
+    for (let i=1;i<=count;i++){
+      const label = document.createElement('label');
+      label.textContent = `Question ${i}`;
+      label.setAttribute('for','q'+i);
+      const ta = document.createElement('textarea');
+      ta.id = 'q'+i;
+      ta.name = 'q'+i;
+      ta.placeholder = `Enter your question ${i}...`;
+      ta.required = true;
+      questionFields.appendChild(label);
+      questionFields.appendChild(ta);
+    }
+  }
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => activateChip(chip));
+    chip.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activateChip(chip); }
+    });
+  });
+
+  backBtn.addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!selected) { alert('Please choose a package first.'); return; }
+
+    // Collect all questions
+    const values = [];
+    for (let i=1;i<=selected;i++){
+      const v = (document.getElementById('q'+i) || {value:''}).value.trim();
+      if (!v){ alert('Please fill all question fields.'); return; }
+      values.push(v);
+    }
+
+    // Retrieve personal data from localStorage
+    let personal = {};
+    try {
+      const raw = localStorage.getItem('kaalChakraData');
+      if (raw) personal = JSON.parse(raw);
+    } catch(e){ personal = {}; }
+
+    const payload = {
+      name: personal.name || "",
+      dob: personal.dob || "",
+      tob: personal.tob || "",
+      pob: personal.pob || "",
+      email: personal.email || "",
+      questions: values
+    };
+
+    // 🪐 Send to Google Sheets
+    try {
+      const res = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(payload)
+      });
+      alert("✨ Your questions and details were submitted successfully! ✨");
+      sessionStorage.removeItem('kaal_chakra_pkg');
+      localStorage.removeItem('kaalChakraData');
+      window.location.href = 'index.html';
+    } catch(err){
+      alert("⚠️ Something went wrong while submitting. Please try again.");
+      console.error(err);
+    }
+  });
+
+})();
+</script>
+
+
+</body>
+</html>

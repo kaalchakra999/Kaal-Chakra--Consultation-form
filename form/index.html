@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaal Chakra — Mystical Consultation</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700&family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet">
+
+
+</script>
+
+  <style>
+    :root{
+      --bg1: #f1e8ff;
+      --bg2: #e8f7ff;
+      --bg3: #fff7f4;
+      --lavender: #c5a9ff;
+      --pale-cyan: #a5d8ff;
+      --soft-peach: #fff0f0;
+      --silver-blue: #dbe9ff;
+      --glass: rgba(255,255,255,0.06);
+      --glass-2: rgba(255,255,255,0.09);
+      --edge-glow: rgba(197,169,255,0.65);
+      --shadow: rgba(200,200,255,0.18);
+      --text: rgba(10,10,20,0.95);
+      --accent: #b585ff;
+      --transition: 300ms cubic-bezier(.2,.9,.3,1);
+    }
+
+    /* Reset */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--text);
+      background: linear-gradient(135deg, var(--bg2), var(--bg1) 55%, var(--bg3));
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      -webkit-font-smoothing:antialiased;
+      position:relative;
+    }
+
+    /* --- Animated Bokeh Background (pure CSS) --- */
+    .bokeh {
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      background:
+        radial-gradient(1200px 1200px at 10% 20%, rgba(197,169,255,0.08), transparent 15%),
+        radial-gradient(900px 900px at 85% 70%, rgba(165,216,255,0.06), transparent 12%),
+        radial-gradient(500px 500px at 50% 40%, rgba(255,240,248,0.05), transparent 8%);
+      mix-blend-mode:screen;
+      filter: blur(18px) saturate(110%);
+    }
+
+    /* drifting orbs */
+    .orb-wrap{
+      position:fixed; inset:0; z-index:0; pointer-events:none;
+    }
+    .orb{
+      position:absolute;
+      border-radius:50%;
+      opacity:0.9;
+      mix-blend-mode:screen;
+      filter: blur(6px);
+      animation: drift var(--dur) linear infinite;
+    }
+    /* multiple orbs (sizes, colors, positions, durations) */
+    .orb.o1{width:220px;height:220px;left:6%;top:10%;background:radial-gradient(circle,#fff0f8 0%, rgba(197,169,255,0.35) 45%, transparent 60%); --dur:60s}
+    .orb.o2{width:160px;height:160px;right:8%;top:18%;background:radial-gradient(circle,#f0fff9 0%, rgba(165,216,255,0.28) 40%, transparent 60%); --dur:48s}
+    .orb.o3{width:120px;height:120px;left:35%;bottom:12%;background:radial-gradient(circle,#fff7ec 0%, rgba(255,224,220,0.22) 45%, transparent 65%); --dur:72s}
+    .orb.o4{width:90px;height:90px;right:28%;bottom:20%;background:radial-gradient(circle,#f6f1ff 0%, rgba(197,169,255,0.22) 50%, transparent 70%); --dur:54s}
+    .orb.o5{width:58px;height:58px;left:60%;top:6%;background:radial-gradient(circle,#e8f9ff 0%, rgba(165,216,255,0.24) 45%, transparent 70%); --dur:36s}
+
+    @keyframes drift {
+      0% { transform: translateY(0) translateX(0) scale(1) }
+      50% { transform: translateY(-60px) translateX(20px) scale(1.03) }
+      100% { transform: translateY(0) translateX(0) scale(1) }
+    }
+
+    /* subtle particle stars */
+    .stars{
+      position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,0.75) 1px, transparent 1px),
+        radial-gradient(circle at 40% 60%, rgba(255,255,255,0.55) 1px, transparent 1px),
+        radial-gradient(circle at 70% 30%, rgba(255,255,255,0.6) 1px, transparent 1px);
+      background-size: 80px 80px, 100px 100px, 60px 60px;
+      filter: blur(0.8px);
+      animation: twinkle 40s linear infinite;
+      opacity:0.7;
+      mix-blend-mode:screen;
+    }
+    @keyframes twinkle{ from{transform:translateY(0)} to{transform:translateY(-120px)} }
+
+    /* --- Glass form container --- */
+    .container{
+      position:relative;
+      z-index:2;
+      width:min(920px,94vw);
+      display:grid;
+      grid-template-columns:1fr 420px;
+      gap:28px;
+      align-items:center;
+      padding:36px;
+      transform:translateZ(0);
+    }
+
+    /* left panel - hero / intro */
+    .hero{
+      background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.06));
+      border-radius:18px;
+      padding:36px;
+      backdrop-filter: blur(10px) saturate(120%);
+      border:1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 8px 40px var(--shadow);
+      position:relative;
+      overflow:hidden;
+      min-height:320px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    /* parallax rings (subtle holographic rings around the form) */
+    .hero::before,
+    .hero::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      pointer-events:none;
+      top: -20%;
+      left: -20%;
+      width:160%;
+      height:160%;
+      box-shadow: inset 0 0 80px rgba(255,255,255,0.02);
+      mix-blend-mode:screen;
+      transform: translateZ(-20px) scale(1);
+      transition: transform var(--transition);
+      opacity:0.9;
+    }
+    .hero::before{
+      background: radial-gradient(circle, rgba(197,169,255,0.08), transparent 30%);
+      filter: blur(18px);
+      transform-origin:center center;
+      animation: ringSlow 12s linear infinite;
+    }
+    .hero::after{
+      background: conic-gradient(from 180deg at 50% 50%, rgba(165,216,255,0.06), transparent 25%, rgba(255,240,248,0.03));
+      filter: blur(28px);
+      animation: ringSlowReverse 18s linear infinite;
+    }
+    @keyframes ringSlow { 0%{transform: rotate(0deg) scale(1)} 50%{transform: rotate(8deg) scale(1.02)} 100%{transform: rotate(0deg) scale(1)} }
+    @keyframes ringSlowReverse { 0%{transform: rotate(0deg) scale(1)} 50%{transform: rotate(-6deg) scale(1.01)} 100%{transform: rotate(0deg) scale(1)} }
+
+    hgroup h1{
+      font-family: "Orbitron", "Cormorant Garamond", serif;
+      font-weight:700;
+      letter-spacing:2px;
+      color: #3b2b55;
+      font-size: clamp(22px, 2.6vw, 36px);
+      margin-bottom:6px;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.6);
+    }
+    hgroup p.lead{
+      font-family: "Cormorant Garamond", serif;
+      color:#2b2b3a;
+      opacity:0.9;
+      margin-bottom:12px;
+      font-size:16px;
+    }
+    hgroup p.mini{
+      font-size:13px;
+      color:#3a3650;
+      opacity:0.85;
+    }
+
+    /* right panel - form card */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
+      border-radius:16px;
+      padding:26px;
+      backdrop-filter: blur(14px) saturate(120%);
+      border:1px solid rgba(197,169,255,0.12);
+      box-shadow: 0 8px 40px rgba(140,120,200,0.08);
+      position:relative;
+      overflow:visible;
+      transform-origin:center;
+      transition: transform var(--transition), box-shadow var(--transition);
+      min-width:320px;
+    }
+
+    .card:hover{ transform: translateY(-6px) scale(1.005); box-shadow: 0 18px 60px rgba(140,120,200,0.14) }
+
+    /* soft neon edge glow */
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:-1.5px;
+      border-radius:inherit;
+      pointer-events:none;
+      background:linear-gradient(120deg, rgba(197,169,255,0.12), rgba(165,216,255,0.09), rgba(255,240,248,0.06));
+      filter: blur(10px);
+      z-index:-1;
+      mix-blend-mode:screen;
+    }
+
+    form{ display:flex; flex-direction:column; gap:12px; }
+
+    /* floating labels (pure CSS) */
+    .field{
+      position:relative;
+      margin-top:8px;
+    }
+    .field input, .field select{
+      width:100%;
+      padding:14px 14px 12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(60,40,80,0.06);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      color: #1a1230;
+      font-size:15px;
+      transition: box-shadow var(--transition), border-color var(--transition), transform var(--transition);
+      -webkit-appearance:none;
+    }
+    /* placeholder trick: give a single space placeholder so :placeholder-shown works */
+    .field input::placeholder{ color:transparent }
+    .field label{
+      position:absolute;
+      left:14px; top:12px;
+      font-size:13px;
+      color: rgba(20,12,30,0.55);
+      pointer-events:none;
+      transform-origin:left top;
+      transition: transform var(--transition), font-size var(--transition), color var(--transition);
+      background:transparent;
+      padding:2px 6px;
+      border-radius:6px;
+      backdrop-filter: blur(2px);
+    }
+
+    /* when input has text or focused — float label up */
+    .field input:focus, .field input:not(:placeholder-shown){
+      outline:none;
+      border-color: rgba(181,133,255,0.8);
+      box-shadow: 0 6px 22px rgba(181,133,255,0.08);
+    }
+    .field input:focus + label,
+    .field input:not(:placeholder-shown) + label{
+      transform: translateY(-38px) scale(0.95);
+      font-size:12px;
+      color: var(--accent);
+      text-shadow: 0 2px 8px rgba(181,133,255,0.12);
+    }
+
+    /* active glow on card focus (keyboard) */
+    .field input:focus-visible{ box-shadow: 0 8px 32px rgba(165,216,255,0.06); }
+
+    .row{ display:flex; gap:10px; }
+    .row .field{ flex:1 }
+
+    .cta{
+      margin-top:8px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+
+    .btn{
+      appearance:none;
+      border: none;
+      cursor:pointer;
+      padding:12px 16px;
+      border-radius:12px;
+      font-weight:700;
+      letter-spacing:0.6px;
+      background: linear-gradient(135deg, var(--lavender), var(--pale-cyan));
+      color: #0b0620;
+      box-shadow: 0 8px 28px rgba(165,129,255,0.12);
+      transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+    }
+    .btn:hover{ transform: translateY(-4px) scale(1.01); box-shadow: 0 18px 48px rgba(165,129,255,0.18); filter: saturate(1.03) }
+
+    .ghost{
+      background:transparent;
+      border:1px solid rgba(10,10,20,0.06);
+      color: #2a2540;
+    }
+
+    /* small hint */
+    .muted{ font-size:13px; color: rgba(10,10,30,0.48); margin-top:6px }
+
+    /* responsive */
+    @media (max-width:920px){
+      .container{ grid-template-columns:1fr; padding:20px; gap:18px; }
+      .hero{ order:2 }
+      .card{ order:1 }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated background layers -->
+  <div class="bokeh" aria-hidden="true"></div>
+  <div class="orb-wrap" aria-hidden="true">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+    <div class="orb o4"></div>
+    <div class="orb o5"></div>
+  </div>
+  <div class="stars" aria-hidden="true"></div>
+
+  <!-- Page Container -->
+  <main class="container" role="main" aria-labelledby="pageTitle">
+    <!-- Left: Intro / CTA -->
+    <section class="hero" aria-hidden="false">
+      <hgroup>
+        <h1 id="pageTitle">KAAL CHAKRA</h1>
+        <p class="lead">As each grain of Time is destroyed,
+The next comes along and brings with it either Creation or Destruction.
+This is the Dance of Shiva.</p>
+        <p class="mini">Jyotisha | Occult | Numerology</p>
+      </hgroup>
+      <div style="height:20px"></div>
+      <p class="muted" style="max-width:120%"><i>At the end of Time, there is dissolution of the entire Creation and all living as well as non-living matter is absorbed unto itself to once again Begin at the Beginning.<i></p>
+    </section>
+
+    <!-- Right: Form Card -->
+    <aside class="card" aria-labelledby="formTitle">
+      <h3 id="formTitle" style="font-family: 'Cormorant Garamond', serif; margin-bottom:10px; color:#2b1e3a">Begin Consultation</h3>
+
+      <form id="personalForm" autocomplete="on" novalidate>
+        <div class="field">
+          <input id="name" name="name" type="text" placeholder=" " required />
+          <label for="name">Full Name</label>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <input id="dob" name="dob" type="date" placeholder=" " required />
+            <label for="dob">Date of birth</label>
+          </div>
+          <div class="field">
+            <input id="tob" name="tob" type="time" placeholder=" " required />
+            <label for="tob">Time of birth</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <input id="pob" name="pob" type="text" placeholder=" " list="cityList" autocomplete="off" required />
+          <label for="pob">Place of birth (City, State)</label>
+        </div>
+
+        <div class="field">
+          <input id="email" name="email" type="email" placeholder=" " required />
+          <label for="email">Email</label>
+        </div>
+
+        <datalist id="cityList">
+          <option value="Mumbai, Maharashtra"></option>
+          <option value="Delhi, Delhi"></option>
+          <option value="Bengaluru, Karnataka"></option>
+          <option value="Hyderabad, Telangana"></option>
+          <option value="Ahmedabad, Gujarat"></option>
+          <option value="Chennai, Tamil Nadu"></option>
+          <option value="Kolkata, West Bengal"></option>
+          <option value="Pune, Maharashtra"></option>
+          <option value="Jaipur, Rajasthan"></option>
+          <option value="Lucknow, Uttar Pradesh"></option>
+          <option value="Chandigarh, Chandigarh"></option>
+        </datalist>
+
+        <div class="cta">
+          <button class="btn" type="submit" aria-label="Proceed to questions">Proceed to Questions →</button>
+          <button type="button" class="btn ghost" id="clearBtn" aria-label="Clear form">Clear</button>
+        </div>
+
+        <p class="muted" style="margin-top:12px">Tip: Inputs use floating labels and glow subtly when active. All data is stored locally for convenience.</p>
+      </form>
+    </aside>
+  </main>
+
+  <script>
+    // Keep scripts minimal, plain JS — run after DOM
+    (function(){
+      const form = document.getElementById('personalForm');
+      const clearBtn = document.getElementById('clearBtn');
+
+      // restore if available
+      try {
+        const saved = localStorage.getItem('kaalChakraData');
+        if (saved) {
+          const d = JSON.parse(saved);
+          if (d.name) document.getElementById('name').value = d.name;
+          if (d.dob) document.getElementById('dob').value = d.dob;
+          if (d.tob) document.getElementById('tob').value = d.tob;
+          if (d.pob) document.getElementById('pob').value = d.pob;
+          if (d.email) document.getElementById('email').value = d.email;
+        }
+      } catch(e){ /* ignore */ }
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const data = {
+          name: document.getElementById('name').value.trim(),
+          dob: document.getElementById('dob').value,
+          tob: document.getElementById('tob').value,
+          pob: document.getElementById('pob').value.trim(),
+          email: document.getElementById('email').value.trim()
+        };
+        // minimal validation
+        if (!data.name || !data.dob || !data.tob || !data.pob || !data.email) {
+          alert('Please complete all fields before continuing.');
+          return;
+        }
+        localStorage.setItem('kaalChakraData', JSON.stringify(data));
+        // navigate to questions page (same design flow)
+        window.location.href = 'questions.html';
+      });
+
+      clearBtn.addEventListener('click', function(){
+        if (confirm('Clear saved details and reset form?')) {
+          localStorage.removeItem('kaalChakraData');
+          form.reset();
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>
